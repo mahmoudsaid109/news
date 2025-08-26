@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news/features/home/data/remote_helper.dart';
 import 'package:news/features/home/presentation/views/home_screen.dart';
 
 void main() {
+  DioHelper.init();
   runApp(const MyApp());
 }
 
@@ -40,7 +42,6 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-
       home: HomeScreen(),
     );
   }
