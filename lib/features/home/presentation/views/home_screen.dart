@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   NewsCubit.get(context).changeMode();
+                  cubit.getBusiness();
                 },
                 icon: const Icon(Icons.brightness_4_outlined),
               ),
@@ -39,8 +40,15 @@ class HomeScreen extends StatelessWidget {
             currentIndex: cubit.currentIndex,
             onTap: (index) {
               cubit.changeBottomNavBar(index);
-              // Fetch data for the selected screen
-              if (index == 0) cubit.getBusiness();
+              if (index == 0) {
+                cubit.getBusiness();
+              } else if (index == 1) {
+              cubit.getBusiness();
+              } else if (index == 2) {
+               cubit.getBusiness();
+              } else {
+                cubit.getBusiness();
+              }
             },
             items: cubit.bottomItems,
           ),

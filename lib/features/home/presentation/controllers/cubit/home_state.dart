@@ -8,7 +8,19 @@ class NewsGetBusinessErrorState extends NewsState {
   final String error;
   NewsGetBusinessErrorState(this.error);
 }
-// ... other states for sports and science ...
+
+class NewsGetSportsLoadingState extends NewsState {}
+class NewsGetSportsSuccessState extends NewsState {}
+class NewsGetSportsErrorState extends NewsState {
+  final String error;
+  NewsGetSportsErrorState(this.error);
+}
+class NewsGetScienceLoadingState extends NewsState {}
+class NewsGetScienceSuccessState extends NewsState {}
+class NewsGetScienceErrorState extends NewsState {
+  final String error;
+  NewsGetScienceErrorState(this.error);
+}
 class AppChangeModeState extends NewsState {}
 class NewsErrorState extends NewsState {
   final String error;

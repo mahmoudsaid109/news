@@ -7,7 +7,7 @@ class CacheHelper {
     try {
       _sharedPreferences = await SharedPreferences.getInstance();
     } catch (e) {
-      print('Error initializing SharedPreferences: $e');
+      // print('Error initializing SharedPreferences: $e');
       
     }
   }
@@ -17,26 +17,26 @@ class CacheHelper {
     required bool value,
   }) async {
     if (_sharedPreferences == null) {
-      print('SharedPreferences not initialized. Call init() first.');
+      // print('SharedPreferences not initialized. Call init() first.');
       return false;
     }
     try {
       return await _sharedPreferences!.setBool(key, value);
     } catch (e) {
-      print('Error saving boolean for key $key: $e');
+      // print('Error saving boolean for key $key: $e');
       return false;
     }
   }
 
   static bool? getBoolean({required String key}) {
     if (_sharedPreferences == null) {
-      print('SharedPreferences not initialized. Call init() first.');
+      // print('SharedPreferences not initialized. Call init() first.');
       return null;
     }
     try {
       return _sharedPreferences!.getBool(key);
     } catch (e) {
-      print('Error retrieving boolean for key $key: $e');
+      // print('Error retrieving boolean for key $key: $e');
       return null;
     }
   }

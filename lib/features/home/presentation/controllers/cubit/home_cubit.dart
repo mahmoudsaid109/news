@@ -5,11 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/features/home/data/cach_helper.dart';
 import 'package:news/features/home/data/remote_helper.dart';
 import 'package:news/features/home/presentation/controllers/cubit/home_state.dart';
-
 import 'package:news/features/modules/sciences/views/science_screen.dart';
 import 'package:news/features/modules/sports/views/sports_screen.dart';
-import 'package:news/features/modules/settings/views/settings_screen.dart';
-
 import '../../../../modules/bussiness/views/business_screen.dart'
     show BusinessScreen;
 
@@ -22,15 +19,9 @@ class NewsCubit extends Cubit<NewsState> {
     BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Business'),
     BottomNavigationBarItem(icon: Icon(Icons.sports_football), label: 'Sports'),
     BottomNavigationBarItem(icon: Icon(Icons.science), label: 'Science'),
-    BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
   ];
 
-  List<Widget> screens = [
-    BusinessScreen(),
-    SportsScreen(),
-    ScienceScreen(),
-    SettingsScreen(),
-  ];
+  List<Widget> screens = [BusinessScreen(), SportsScreen(), ScienceScreen()];
 
   void changeBottomNavBar(int index) {
     currentIndex = index;
@@ -83,8 +74,6 @@ class NewsCubit extends Cubit<NewsState> {
             emit(AppChangeModeState());
           })
           .catchError((error) {
-            print('Error saving theme preference: $error');
-            // Optionally emit an error state
             emit(NewsErrorState('Failed to save theme preference: $error'));
           });
     }
