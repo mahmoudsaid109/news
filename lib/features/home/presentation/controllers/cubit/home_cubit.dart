@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/features/home/data/cach_helper.dart';
 import 'package:news/features/home/data/remote_helper.dart';
 import 'package:news/features/home/presentation/controllers/cubit/home_state.dart';
 
@@ -11,7 +14,7 @@ import '../../../../modules/bussiness/views/business_screen.dart'
     show BusinessScreen;
 
 class NewsCubit extends Cubit<NewsState> {
-  NewsCubit() : super(IntialNewsSate());
+  NewsCubit() : super(InitialNewsState());
   static NewsCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
@@ -66,5 +69,24 @@ class NewsCubit extends Cubit<NewsState> {
           print('Error fetching business news: $error');
           emit(NewsGetBusinessErrorState(error.toString()));
         });
+  }
+
+  bool isDark = false;
+  void changeMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(AppChangeModeState());
+    } else {
+      isDark = !isDark;
+      CacheHelper.putBoolean(key: 'isDark', value: isDark)
+          .then((_) {
+            emit(AppChangeModeState());
+          })
+          .catchError((error) {
+            print('Error saving theme preference: $error');
+            // Optionally emit an error state
+            emit(NewsErrorState('Failed to save theme preference: $error'));
+          });
+    }
   }
 }

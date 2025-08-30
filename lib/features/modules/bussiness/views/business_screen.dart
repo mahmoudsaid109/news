@@ -19,7 +19,7 @@ class BusinessScreen extends StatelessWidget {
           return ListView.builder(
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) => buildArticleItem(list[index]),
-            itemCount: list.length,
+            itemCount: 20,
           );
         } else {
           return Center(child: Text('Something went wrong'));

@@ -8,30 +8,44 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => NewsCubit()..getBusiness(),
-      child: BlocConsumer<NewsCubit, NewsState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          var cubit = NewsCubit.get(context);
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('News App'),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search_outlined)),
-              ],
-            ),
-            body: cubit.screens[cubit.currentIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: cubit.currentIndex,
-              onTap: (index) {
-                cubit.changeBottomNavBar(index);
-              },
-              items: cubit.bottomItems,
-            ),
-          );
-        },
-      ),
+    return BlocConsumer<NewsCubit, NewsState>(
+      listener: (context, state) {
+        if (state is NewsErrorState) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      builder: (context, state) {
+        var cubit = NewsCubit.get(context);
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('News App'),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.search_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  NewsCubit.get(context).changeMode();
+                },
+                icon: const Icon(Icons.brightness_4_outlined),
+              ),
+            ],
+          ),
+          body: cubit.screens[cubit.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: cubit.currentIndex,
+            onTap: (index) {
+              cubit.changeBottomNavBar(index);
+              // Fetch data for the selected screen
+              if (index == 0) cubit.getBusiness();
+            },
+            items: cubit.bottomItems,
+          ),
+        );
+      },
     );
   }
 }
