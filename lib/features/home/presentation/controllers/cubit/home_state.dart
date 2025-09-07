@@ -26,3 +26,13 @@ class NewsErrorState extends NewsState {
   final String error;
   NewsErrorState(this.error);
 }
+
+class NewsGetSearchLoadingState extends NewsState {}
+class NewsGetSearchSuccessState extends NewsState {
+  final List<Map<String, dynamic>> articles;
+  NewsGetSearchSuccessState(this.articles);
+}
+class NewsGetSearchErrorState extends NewsState {
+  final String error;
+  NewsGetSearchErrorState(this.error);
+}

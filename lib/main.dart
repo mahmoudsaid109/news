@@ -10,9 +10,9 @@ import 'package:news/features/home/presentation/views/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DioHelper.init(); 
-  await CacheHelper.init(); 
-  bool isDark = CacheHelper.getBoolean(key: 'isDark') ?? false; 
+  DioHelper.init();
+  await CacheHelper.init();
+  bool isDark = CacheHelper.getBoolean(key: 'isDark') ?? false;
   runApp(MyApp(isDark: isDark));
 }
 
@@ -22,8 +22,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NewsCubit()..changeMode(fromShared: isDark),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NewsCubit()..changeMode(fromShared: isDark),
+        ),
+        BlocProvider(create: (context) => NewsCubit()..getBusiness()),
+      ],
       child: BlocBuilder<NewsCubit, NewsState>(
         builder: (context, state) {
           final cubit = NewsCubit.get(context);
@@ -38,12 +43,8 @@ class MyApp extends StatelessWidget {
                 selectedItemColor: Colors.deepOrange,
                 unselectedItemColor: Colors.grey,
                 elevation: 20.0,
-                selectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
               ),
               appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.white,

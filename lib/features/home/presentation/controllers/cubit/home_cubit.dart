@@ -9,6 +9,7 @@ import 'package:news/features/modules/sciences/views/science_screen.dart';
 import 'package:news/features/modules/sports/views/sports_screen.dart';
 import '../../../../modules/bussiness/views/business_screen.dart'
     show BusinessScreen;
+import 'package:dio/dio.dart'; // Added for DioException
 
 class NewsCubit extends Cubit<NewsState> {
   NewsCubit() : super(InitialNewsState());
@@ -34,11 +35,6 @@ class NewsCubit extends Cubit<NewsState> {
     DioHelper.getData(
           url:
               'https://newsapi.org/v2/everything?q=keyword&apiKey=68b1db703dc44c468771fe9ebf3ba7bc',
-          // query: {
-          //   'country': 'eg',
-          //   'category': 'business',
-          //   'apiKey': '68b1db703dc44c468771fe9ebf3ba7bc',
-          // },
         )
         .then((value) {
           print('API Response: ${value.data}');
@@ -76,6 +72,48 @@ class NewsCubit extends Cubit<NewsState> {
           .catchError((error) {
             emit(NewsErrorState('Failed to save theme preference: $error'));
           });
+    }
+  }
+
+  List<Map<String, dynamic>> search = []; // Changed to typed list
+  void getSearch({required String value}) async {
+    // Input validation
+    if (value.trim().isEmpty) {
+      emit(NewsGetSearchErrorState('Search query cannot be empty'));
+      return;
+    }
+
+    emit(NewsGetSearchLoadingState());
+    final sanitizedValue = Uri.encodeQueryComponent(value.trim());
+
+    try {
+      final response = await DioHelper.getData(
+        url:
+            'https://newsapi.org/v2/everything?q=$sanitizedValue&apiKey=68b1db703dc44c468771fe9ebf3ba7bc',
+      );
+      final data = response.data as Map<String, dynamic>?;
+
+      if (data == null) {
+        debugPrint('API Error: Response data is null');
+        emit(NewsGetSearchErrorState('Invalid response from server'));
+        return;
+      }
+
+      if (data['status'] == 'ok' && data['articles'] != null) {
+        search = List<Map<String, dynamic>>.from(data['articles']);
+        debugPrint(search.isNotEmpty ? 'First article title: ${search[0]['title']}' : 'No articles found');
+        emit(NewsGetSearchSuccessState(search)); // Pass search results to state
+      } else {
+        final errorMessage = data['message'] as String? ?? 'Unknown API error';
+        debugPrint('API Error: $errorMessage');
+        emit(NewsGetSearchErrorState(errorMessage));
+      }
+    } catch (error) {
+      final errorMessage = error is DioException
+          ? 'Network error: ${error.message ?? error.toString()}'
+          : 'Error fetching search results: $error';
+      debugPrint(errorMessage);
+      emit(NewsGetSearchErrorState(errorMessage));
     }
   }
 }

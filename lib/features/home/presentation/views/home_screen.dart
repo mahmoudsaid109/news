@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/features/home/presentation/controllers/cubit/home_cubit.dart';
 import 'package:news/features/home/presentation/controllers/cubit/home_state.dart';
 
+import '../../../../core/utils/component.dart';
+import '../../../modules/search/search_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -23,7 +26,9 @@ class HomeScreen extends StatelessWidget {
             title: const Text('News App'),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  navigateTo(context, SearchScreen());
+                },
                 icon: const Icon(Icons.search_outlined),
               ),
               IconButton(
@@ -43,9 +48,9 @@ class HomeScreen extends StatelessWidget {
               if (index == 0) {
                 cubit.getBusiness();
               } else if (index == 1) {
-              cubit.getBusiness();
+                cubit.getBusiness();
               } else if (index == 2) {
-               cubit.getBusiness();
+                cubit.getBusiness();
               } else {
                 cubit.getBusiness();
               }
